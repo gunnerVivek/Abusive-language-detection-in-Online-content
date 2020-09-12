@@ -6,6 +6,3 @@ DATA_DIR = os.path.join(ROOT_DIR, 'data')
 
 TRANSFORMED_DATA_DIR = os.path.join(ROOT_DIR, 'processed data')
 
-# print(ROOT_DIR)
-# print(DATA_DIR)
-print(TRANSFORMED_DATA_DIR)
