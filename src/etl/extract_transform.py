@@ -3,11 +3,13 @@
 '''
 
 import os
-import tweets
-import white_supremacy
+
+from tweeter.tweets import Tweets
+from white_supremacy import WhiteSupremacy
 import wkpd_personal_attacks
-import toxic_comments
-import fb_hate_speech
+from toxic_comments.toxic_comments import ToxicComment
+from fb_hate_speech import FBHateSpeech
+
 from definitions import TRANSFORMED_DATA_DIR
 
 
@@ -16,17 +18,17 @@ class ExtractTransform:
         This class contains methods to Extract data from pre-decided sources
         and Transform them according to the project needs.
 
-        Then writes the data sources to a predefined lcation as stated in 
+        Then writes the data sources to a predefined location as stated in 
         TRANSFORMED_DATA_DIR.
     '''
 
-    def perform_write(self, data, file_name=None, file_extension='.csv', mode='w'):
+    def _perform_write(self, data, file_name, mode='w'):
 
         '''Writes the data to disk'''
         
         try:
             # file path (including file name) for write
-            _file = os.path.join(TRANSFORMED_DATA_DIR, file_name+file_extension)
+            _file = os.path.join(TRANSFORMED_DATA_DIR, file_name)
 
             if mode == 'a': # append mode
                 if not os.path.isfile(_file):
@@ -46,7 +48,7 @@ class ExtractTransform:
                                 )
 
         except Exception:
-            print('Exception occured while writing {}.'.format(file_name+file_extension))
+            print('Exception occured while writing {}.'.format(file_name))
 
 
     def pipeline(self, mode='w'):
@@ -55,22 +57,22 @@ class ExtractTransform:
         '''
         
         ## Twitter data
-        self.perform_write(tweets.mine_tweets(), file_name='tweeter_data', mode=mode)
+        self._perform_write(Tweets().pipeline(), file_name='tweeter_data', mode=mode)
         
         ## White Suupremacy Forum Data
-        self.perform_write(white_supremacy.get_white_supremiest_data(), file_name='white_supremist_data', mode=mode)
+        self._perform_write(WhiteSupremacy().get_white_supremiest_data(), file_name='white_supremist_data', mode=mode)
         
         ## Wikipedia Personal Attacks data
-        self.perform_write(wkpd_personal_attacks.get_wikipedia_personal_attacks(), file_name='wikipedia_personal_attacks', mode=mode)
+        self._perform_write(wkpd_personal_attacks.get_wikipedia_personal_attacks(), file_name='wikipedia_personal_attacks', mode=mode)
         
         ## Toxic comments
-        self.perform_write(toxic_comments.get_toxic_comments(), file_name='toxic_comments', mode=mode)
+        self._perform_write(ToxicComment().pipeline(), file_name='toxic_comments', mode=mode)
         
         ## FaceBook Hate Speech
-        self.perform_write(fb_hate_speech.get_fb_hate_speech(), file_name='facebook_hate_speech_translated', mode=mode)
+        self._perform_write(FBHateSpeech().get_fb_hate_speech(), file_name='facebook_hate_speech_translated', mode=mode)
         
         ## Unintended Toxic Comments
-        self.perform_write(unintended_toxic_comments.get_unintended_toxic_comments(), file_name='unintended_toxic_comments', mode=mode)
+        self._perform_write(unintended_toxic_comments.get_unintended_toxic_comments(), file_name='unintended_toxic_comments', mode=mode)
         
 
 if __name__ == "__main__":
