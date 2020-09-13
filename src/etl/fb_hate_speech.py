@@ -8,6 +8,7 @@ import mysql.connector as connector
 
 from google.cloud import translate_v2 as translate
 
+from definitions import TRANSFORMED_DATA_DIR
 from etl.definations_configurations import ABUSE, NO_ABUSE, FB_DB_CONFIG, GCP_TRANSLATE_CREDENTIALS_PATH
 
 
@@ -17,7 +18,7 @@ class FBHateSpeech:
         The data is available in a MySQL database.
     '''
 
-    def query_db(self, **config):
+    def _query_db(self, **config):
         
         '''
             Query the MySQL database.
@@ -56,14 +57,14 @@ class FBHateSpeech:
         return data
 
 
-    def set_gcp_credentials(self):
+    def _set_gcp_credentials(self):
         
         ''' Set the gcp cerentials '''
 
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GCP_TRANSLATE_CREDENTIALS_PATH
 
 
-    def translate_to_english(self, text):
+    def _translate_to_english(self, text):
 
         '''
             translates single text document.
@@ -71,7 +72,7 @@ class FBHateSpeech:
             Uses GCP Translate
         '''
 
-        self.set_gcp_credentials()
+        self._set_gcp_credentials()
 
         try:
             translate_client = translate.Client()
@@ -88,13 +89,13 @@ class FBHateSpeech:
             Combines the
         '''
         # query the DB
-        data = self.query_db(**FB_DB_CONFIG)
+        data = self._query_db(**FB_DB_CONFIG)
         # remove duplicates returned due to multiple annotators,
         # only if exactly the same
         data = data.drop_duplicates(ignore_index=True)
         
         # Translate to English - calling GCP Translate
-        data['translated_message'] = data.message.apply(self.translate_to_english)
+        data['translated_message'] = data.message.apply(self._translate_to_english)
         
         # Create albel
         data['label'] = data.target_type.apply(lambda  x: NO_ABUSE if x==1 else ABUSE)
@@ -106,7 +107,9 @@ class FBHateSpeech:
 
 
 if __name__ == "__main__":
-    write_path = r"processed data/"
-
-    data = FBHateSpeech().get_fb_hate_speech()
-    data.to_csv(write_path+'facebook_hate_speech_translated.csv', index=False)
+    
+	write_file = os.path.join(TRANSFORMED_DATA_DIR, 'facebook_hate_speech_translated.csv')
+    
+	data = FBHateSpeech().get_fb_hate_speech()
+    data.to_csv(write_file, index=False)
+    

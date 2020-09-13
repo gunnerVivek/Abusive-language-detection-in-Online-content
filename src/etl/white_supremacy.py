@@ -26,7 +26,7 @@ from etl.definations_configurations import ABUSE, NO_ABUSE
 
 class WhiteSupremacy:
 
-    def get_fileId_label(self):
+    def _get_fileId_label(self):
         '''
             Read the file and get Id and Label of the data
         '''
@@ -57,7 +57,7 @@ class WhiteSupremacy:
         row  = collections.namedtuple('row', ['file_id', 'text'])
         texts = []
         
-        id_label_frame = get_fileId_label()
+        id_label_frame = _get_fileId_label()
 
         # id_label_frame = id_label_frame.head(5)
         for file_id in id_label_frame['file_id']:
