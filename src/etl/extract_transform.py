@@ -1,17 +1,25 @@
+'''
+    This module performs Extraction and Transformation of data.
+'''
+
 import os
 import tweets
 import white_supremacy
 import wkpd_personal_attacks
 import toxic_comments
 import fb_hate_speech
-from definitions import DATA_DIR, TRANSFORMED_DATA_DIR
+from definitions import TRANSFORMED_DATA_DIR
 
 
 class ExtractTransform:
     '''
         This class contains methods to Extract data from pre-decided sources
         and Transform them according to the project needs.
+
+        Then writes the data sources to a predefined lcation as stated in 
+        TRANSFORMED_DATA_DIR.
     '''
+
     def perform_write(self, data, file_name=None, file_extension='.csv', mode='w'):
 
         '''Writes the data to disk'''
@@ -33,7 +41,9 @@ class ExtractTransform:
                 #    overwrite existing file
                 data.to_csv(_file, mode='w', index=False)
             else:
-                raise ValueError("'mode' argument should be either 'a' (append mode) or 'w' (write mode). Passed value: {}".format(mode))
+                raise ValueError(''' 'mode' argument should be either 'a' (append mode)
+                                      or 'w' (write mode). Passed value: {}'''.format(mode)
+                                )
 
         except Exception:
             print('Exception occured while writing {}.'.format(file_name+file_extension))
@@ -41,7 +51,7 @@ class ExtractTransform:
 
     def pipeline(self, mode='w'):
         '''
-            Fetches data from each of the sources.
+            Fetches data from each of the sources serially.
         '''
         
         ## Twitter data
