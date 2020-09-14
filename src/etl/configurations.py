@@ -12,6 +12,14 @@ FB_DB_CONFIG = {
     'raise_on_warnings': True
 }
 
+TRANSFORMED_DATA_DB_CONFIG = {
+    'user': 'root',
+    'password': 'abuse_detection'
+    'host': '35.244.1.220'
+    'port': 3306,
+    'database': 'transformed-data',
+    'raise_on_warnings': True
+}
 
 GCP_TRANSLATE_CREDENTIALS_PATH = os.path.join(ROOT_DIR, "src\etl", "Deploy SQL-f6f702799144.json")
 
