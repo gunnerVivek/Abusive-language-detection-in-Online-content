@@ -2,3 +2,7 @@ hate_keywords.txt
 TODO.txt
 Deploy SQL-f6f702799144.json
 description.txt
+.vscode/
+__pycache__/
+Deploy SQL-f6f702799144.json
+definations_configurations - Copy.py
