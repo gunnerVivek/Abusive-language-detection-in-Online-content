@@ -19,7 +19,7 @@ TRANSFORMED_DATA_DB_CONFIG = {
     'password': 'abuse_detection',
     'host': '35.244.1.220',
     'port': 3306,
-    'database': 'transformed_data',
+    'database': 'transformed_data'
     # 'raise_on_warnings': True --> raises exceptions for drop if exists, because it causes warnings
 }
 
