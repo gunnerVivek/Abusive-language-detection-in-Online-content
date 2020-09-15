@@ -2,6 +2,8 @@
     This module contains all the configurations needed by 
     the modules in the etl package
 '''
+import os
+from definitions import ROOT_DIR
 
 FB_DB_CONFIG = {
     'user': 'root',
@@ -14,8 +16,8 @@ FB_DB_CONFIG = {
 
 TRANSFORMED_DATA_DB_CONFIG = {
     'user': 'root',
-    'password': 'abuse_detection'
-    'host': '35.244.1.220'
+    'password': 'abuse_detection',
+    'host': '35.244.1.220',
     'port': 3306,
     'database': 'transformed-data',
     'raise_on_warnings': True
