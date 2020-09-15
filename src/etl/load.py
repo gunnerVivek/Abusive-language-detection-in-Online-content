@@ -119,7 +119,9 @@ class LoadTransformed:
         # by default due to potential security issue.
         try:
             # preps for fast repeated execution
-            prepare_stmt = " PREPARE stmt FROM 'INSERT INTO {table_name} (`message`,`label`) VALUES(?,?)'; "
+            prepare_stmt = ''' PREPARE stmt FROM 
+                               'INSERT INTO {table_name} (`message`,`label`) 
+                                VALUES(?,?)'; '''.format(table_name=table_name)
             self.cursor.execute(prepare_stmt)
 
             insert_stmt  = " EXECUTE stmt USING {message}, {label} "
@@ -202,7 +204,7 @@ class LoadTransformed:
 
             except Exception as e:
                 # Catching exception thrown from called function
-                print(traceback.format_exec())  # Log
+                print(traceback.format_exc())  # Log
                 continue
             
 
