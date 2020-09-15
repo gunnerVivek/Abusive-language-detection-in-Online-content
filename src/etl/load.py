@@ -44,7 +44,7 @@ class LoadTransformed:
         
         try:
             self.connection = connector.connect(**config)
-            self.cursor = self.connection.cursor(buffered=True)
+            self.cursor = self.connection.cursor(prepared=True) #buffered=True, 
         
         except mysql_error.InterfaceError as e: # data base did not respond (service down or otherwise) | # wrong port | 3 wrong host IP
             print(traceback.format_exc) #Log
@@ -119,21 +119,28 @@ class LoadTransformed:
         # by default due to potential security issue.
         try:
             # preps for fast repeated execution
-            prepare_stmt = ''' PREPARE stmt FROM 
-                               'INSERT INTO {table_name} (`message`,`label`) 
-                                VALUES(?,?)'; '''.format(table_name=table_name)
-            self.cursor.execute(prepare_stmt)
+            # prepare_stmt = ''' PREPARE stmt FROM 
+            #                    'INSERT INTO {table_name} (`message`,`label`) 
+            #                     VALUES(?,?)'; '''.format(table_name=table_name)
+            # self.cursor.execute(prepare_stmt)
 
-            insert_stmt  = " EXECUTE stmt USING {message}, {label} "
+            _insert_query = '''
+                                INSERT INTO {table_name} (`message`,`label`) 
+                                VALUES(%s,%s)
+                           '''.format(table_name=table_name)
+            # insert_stmt  = " EXECUTE stmt USING {message}, {label};"
 
             for index, row in dataset.iterrows():
 
-                self.cursor.execute(insert_stmt.format(message=row['message'], label=row['label']))
+                # self.cursor.execute(insert_stmt.format(message=row['message'], label=row['label']))
+                self.cursor.execute(_insert_query, (row['message'], row['label']))
             
             # print('Loading of {table_name} completed'.format(table_name=table_name)) # Log
 
-            deallocate_stmt = "DEALLOCATE PREPARE stmt;"
-            self.cursor.execute(deallocate_stmt)
+            # deallocate_stmt = "DEALLOCATE PREPARE stmt;"
+            # self.cursor.execute(deallocate_stmt)
+
+            self.connection.commit()
 
         except mysql_error.DatabaseError as e: # Unknown table - table does not exists
             print('table `{}` does not exist'.format(table_name))
