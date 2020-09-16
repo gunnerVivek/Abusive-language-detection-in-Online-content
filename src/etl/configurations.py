@@ -20,7 +20,7 @@ TRANSFORMED_DATA_DB_CONFIG = {
     'host': '35.244.1.220',
     'port': 3306,
     'database': 'transformed_data'
-    # 'raise_on_warnings': True --> raises exceptions for drop if exists, because it causes warnings
+    # 'raise_on_warnings': True --> raises exceptions on warnings, ex: for drop if exists, because it causes warnings in MySQL
 }
 
 # needed only for translation task
