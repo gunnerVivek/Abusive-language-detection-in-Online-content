@@ -129,7 +129,7 @@ class LoadTransformed:
 
 
 
-    def __write_to_db(self, dataset, table_name=None):
+    def __write_to_db(self, dataset, table_name=None, batch_size=500):
         '''
             Load data into DB Table
             dataset is a data collection of multiple rows.
@@ -153,7 +153,7 @@ class LoadTransformed:
 
                 # for batch size == 500
                 # Insert data into DB and commit 
-                if index>0 and index % 500 == 0:
+                if index>0 and index % batch_size == 0:
                     self.connection.start_transaction()
 
                     self.cursor.executemany(_insert_query, transaction_data_list)
@@ -284,6 +284,9 @@ if __name__ == "__main__":
     # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\wikipedia_personal_attacks.csv
     
     load_transformed = LoadTransformed()
+    
+    # RESUME wikipedia FROM 28501
+    
     file_paths = [
                   r"E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\wikipedia_personal_attacks.csv"
     ] # r"E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\toxic_comments.csv",
