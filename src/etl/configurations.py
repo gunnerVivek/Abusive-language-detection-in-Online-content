@@ -11,7 +11,7 @@ FB_DB_CONFIG = {
     'host': '34.93.153.220',
     'port': 3306,
     'database': 'facebook_hate_speech',
-    'raise_on_warnings': True
+    # 'raise_on_warnings': True
 }
 
 TRANSFORMED_DATA_DB_CONFIG = {
