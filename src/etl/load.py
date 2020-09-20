@@ -273,27 +273,11 @@ class LoadTransformed:
 if __name__ == "__main__":
     
     # use pathlib to get all files .csv
-    # file_pattern = '*.csv' # CHANGED
-    # file_paths = list(pathlib.Path(TRANSFORMED_DATA_DIR).glob(file_pattern)) # CHANGED
+    file_pattern = '*.csv' # CHANGED
+    file_paths = list(pathlib.Path(TRANSFORMED_DATA_DIR).glob(file_pattern)) # CHANGED
 
-
-    # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\facebook_hate_speech_translated.csv
-    # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\toxic_comments.csv
-    # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\tweeter_data.csv
-    # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\white_supremist_data.csv
-    # E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\wikipedia_personal_attacks.csv
-    
     load_transformed = LoadTransformed()
     
-    # RESUME wikipedia FROM 28501
-    
-    file_paths = [
-                  r"E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\wikipedia_personal_attacks.csv"
-    ] # r"E:\repositories\Abusive-language-detection-in-Online-content\transformed_data\toxic_comments.csv",
-    
-    # CHANGED
-    # call the data sources
-
     load_transformed.pipeline(file_paths)
 
     # clean up
