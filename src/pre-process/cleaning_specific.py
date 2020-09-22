@@ -21,7 +21,13 @@ import mysql.connector as connector
 import mysql.connector.errors as mysql_error
 import re
 
-from pandas import Series
+from pandas import Series, DataFrame
+
+import os.path
+
+from definitions import TRANSFORMED_DATA_DIR
+
+
 
 # import logging
 # import logging.config
@@ -29,31 +35,7 @@ from pandas import Series
 
 # get log configuration from file
 # logging.config.fileConfig("etl_logging.conf")
-
-class Switcher(object):
-      
-    def switch(self,method_name):
-        method=getattr(self,method_name,lambda :'Invalid')
-        return method()
-
-
-    def facebook_hate_speech_translated(self, column):
-        if not isinstance(column, Series):
-            column = Series(column)
-
-        column = column
-        re.sub()
-        return 'fb'
-
-    def toxic_comments(self):
-        return 'wiki'
-    def tweeter_data(self):
-        return 'hate'
-    def white_supremist_data()
-        pass
-    def wikipedia_personal_attacks():
-        pass
-
+    
 
 class SpecificClean:
 
@@ -82,27 +64,85 @@ class SpecificClean:
         # self.load_logger.info('Connected to DB.')
 
 
-    def __get_table_names(self):
+    # def __get_table_names(self):
                 
-        # query = "SELECT * FROM wikipedia_personal_attacks LIMIT 100;"
-        query = "SHOW TABLES;"
-        SpecificClean.cursor.execute(query)
+        # # query = "SELECT * FROM wikipedia_personal_attacks LIMIT 100;"
+        # query = "SHOW TABLES;"
+        # SpecificClean.cursor.execute(query)
 
-        result = SpecificClean.cursor.fetchall()
-        result = [x[0] for x in result]
+        # result = SpecificClean.cursor.fetchall()
+        # result = [x[0] for x in result]
 
+        # return result
+
+    
+    def __read_data(self, table_name):
+        
+        # TODO: use connection to db
+
+        # query = f"SELECT * FROM {table_name};"
+
+        # SpecificClean.cursor.execute(query)
+
+        # result = SpecificClean.cursor.fetchall()
+
+
+        result = pd.read_csv(os.path.join(TRANSFORMED_DATA_DIR, table_name,".csv"),
+                         names=['message', 'label'], header=0)
         return result
 
-    def __cleaning_steps():
+    def __facebook_hate_speech_translated(self):
+        
+        data = self.__read_data("facebook_hate_speech_translated")
+        # data = DataFrame(data, columns=['message', 'label']) # TODO
+        
+        data = data.drop_duplicates(subset=['message'])
+
+        remove_quot_decimal = lambda x: re.sub("&quot;", '', x)
+        remove_apostrophe_decimal = lambda x: re.sub("&#39;", "'", x)
+        remove_trailing_leading_spaces = lambda x: x.strip()
+
+        data['message'] = data['message'].apply(remove_quot_decimal)\
+                                         .apply(remove_apostrophe_decimal)\
+                                         .apply(remove_trailing_leading_spaces)
+
+        
+        return data
+
+    def __toxic_comments(self):
+        
+        data = self.__read_data("toxic_comments")
+        # data = DataFrame(data, columns=['message', 'label']) # TODO
+        
+        data = data.drop_duplicates(subset=['message'])
+
+         = lambda x: 
+         = lambda x: 
+        remove_trailing_leading_spaces = lambda x: x.strip()
+
+        data['message'] = data['message'].apply(remove_quot_decimal)\
+                                         .apply(remove_apostrophe_decimal)\
+                                         .apply(remove_trailing_leading_spaces)
+
+        
+        return data
+
+
+    def __tweeter_data(self):
+        return 'hate'
+
+    def __white_supremist_data()
         pass
 
-    def __read_data(self, parameter_list):
+    def __wikipedia_personal_attacks():
         pass
 
     def pipeline(self):
 
         self.__setup_db_connection(**TRANSFORMED_DATA_DB_CONFIG)
         table_names = self.__get_table_names()
+
+        
 
     # def __get_table_names(self):
 
