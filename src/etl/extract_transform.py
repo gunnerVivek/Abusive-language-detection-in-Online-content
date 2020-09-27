@@ -31,7 +31,7 @@ class ExtractTransform:
             _file = os.path.join(TRANSFORMED_DATA_DIR, file_name)
 
             if mode == 'a': # append mode
-                if not os.path.isfile(_file):
+                if not os.path.isfile(_file): # if the file does not exist
                     data.to_csv(_file, mode='a', index=False)
                 else: # else it exists so append without writing the header
                     data.to_csv(_file, mode='a', header=False, index=False)
