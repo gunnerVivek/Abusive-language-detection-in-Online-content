@@ -11,3 +11,4 @@ logs
 .ipynb_checkpoints
 configurations_2.py
 cleaned_data
+.pytest_cache
