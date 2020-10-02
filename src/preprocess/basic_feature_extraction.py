@@ -66,47 +66,42 @@ def extract_features(data):
     
     # Word count
     data['word_count'] = data['message'].apply(lambda x: len(str(x).split()))
-    print('.')
+
 
     # Character count
     data['char_count'] = data['message'].apply(lambda x: len( str(x) ))
-    print('..')
+
     
     # Average word length
     data['avg_word_len'] = data['message'].apply(avg_word_len)
-    print('...')
+
 
     # Upper case word count
     data['upper_case_words'] = data['message'].apply(lambda x: len([word for word in str(x).split() if word.isupper()]))
-    print('....')
 
-    # Numeric digit present?
+
+    # count of Numeric digit
     data['numeric_count'] = data['message'].apply(lambda document: len([word for word in str(document).split() if is_number(word)]))
-    print('.....')
+
 
     # Word Density - average length of the words
     data['word_density'] = data['char_count'] / (data['word_count']+1)
-    print('......')
 
     # Punctuation count
     punctuations = ['.',',', '"', "'", '-', '?', ':', '!', ';', '<<', '>>', '[', ']', '(', ')' , '{', '}']
     data['punct_count'] = data['message'].apply(lambda x: len([word for word in str(x).split() if word in punctuations]))
-    print('......')
 
     # Stop count
     data['stop_word_count'] = data['message'].apply(lambda x: len([word for word in str(x).split() if word in STOP_WORDS]))
-    print('......')
 
     # AUxillary / be verb/ conjunction count -- Assumption is that it requires a calm and balanced mind to properly use be verbs and hence no abuse
     data['be_verb_count'] = data['message'].apply(lambda x: len([word for word in str(x).split() if is_be_verb(word)]))
 
     # Unique word count
     data['num_unique_words'] = data['message'].apply(lambda x: len(set(w for w in str(x).split())))
-    print('-1')
     
     # Unique words : Number of Words
     data['unique_vs_words'] = data['num_unique_words'] / data['word_count']
-    print('0')
 
     return data
 
