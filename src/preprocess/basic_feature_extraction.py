@@ -102,6 +102,12 @@ def extract_features(data):
     
     # Unique words : Number of Words
     data['unique_vs_words'] = data['num_unique_words'] / data['word_count']
+    
+    # upper case words vs word count Ratio
+    data["Upper_case_vs_words"] = data.upper_case_words/data.word_count
+
+    # count of exclamation marks
+    data['exclamation_count'] = data.message.apply(lambda document: len(re.findall("!", str(document))))
 
     return data
 
