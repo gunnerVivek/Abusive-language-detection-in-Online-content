@@ -82,12 +82,13 @@ if __name__ == "__main__":
         lst.append(pos_tagging(preprocessing.prepro_pipe(row['message'], sequence=False)))
         if (i+1) % 50 == 0:
             logging.info()
-            DataFrame(lst).to_csv(output_file, mode='a', index=False)
+            # header must be written only when file does not exist
+            DataFrame(lst).to_csv(output_file, mode='a', index=False, header=not os.path.isfile(write_file_name))
             lst.clear()
 
     # any data remaining for the last batch - overflow 
     #data = DataFrame(lst)
-    DataFrame(lst).to_csv(output_file, mode='a', index=False)
+    DataFrame(lst).to_csv(output_file, mode='a', index=False, header=not os.path.isfile(write_file_name))
     # # print(data)
     # data = preprocessing.preprocess(data, sequence=False)
     
