@@ -8,6 +8,8 @@
     Observe the comments from both categories manually
     https://towardsdatascience.com/how-i-improved-my-text-classification-model-with-feature-engineering-98fbe6c13ef3
 '''
+import sys
+
 import spacy
 nlp = spacy.load('en_core_web_md')
 from spacy.lang.en.stop_words import STOP_WORDS
@@ -15,7 +17,7 @@ STOP_WORDS.difference_update(set(['no', 'not', 'dont']))
 
 from textblob import TextBlob
 
-# from pandas import read_csv
+from pandas import read_csv
 
 # from definitions import CLEANED_DATA_DIR
 
@@ -104,4 +106,14 @@ def preprocess(data, text_column='message', sequence=True):
 
 if __name__ == "__main__":
     
-    preprocess()
+    sequence = sys.argv[1]
+    if sequence.strip().lower() == 'y' or sequence.strip().lower() == 'yes':
+        sequence = True
+    else:
+        sequence = False
+
+    input_file = "train_cleaned.csv"
+    output_file = 'train_lemma_stopword.csv'
+    
+    preprocess(read_csv(input_file), sequence=sequence).to_csv(output_file, index=False)
+
